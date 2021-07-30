@@ -1,19 +1,64 @@
 <template>
   <div class="container">
-    <Card />
-    <Card />
-    <Card />
+    <Card v-for="person in people" :firstName="person.firstName" :lastName="person.lastName" :gender="person.gender" :image="person.image" />
+    <!-- <Card />
+    <Card /> -->
   </div>
-  <Button>Generate Users</Button>
+  <Button >Generate Users</Button>
 </template>
 
-<script setup>
+<script>
+import { onMounted } from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
 import Card from "./components/Card.vue";
 import Button from "./components/Button.vue";
 
-// This starter template is using Vue 3 experimental <script setup> SFCs
-// Check out https://github.com/vuejs/rfcs/blob/master/active-rfcs/0040-script-setup.md
+export default {
+  name: 'App',
+  components: {
+    HelloWorld,
+    Card,
+    Button
+  },
+  data: function () {
+    return {
+      people: [
+        
+      ]
+    }
+  },
+  methods: {
+    generateUser: async function () {
+      let people = this.people;
+
+      const res = await fetch('https://randomuser.me/api')
+      let person = {};
+      let data = await res.json();
+
+      person.firstName = data.results[0].name.first;
+      person.lastName = data.results[0].name.last;
+      person.gender = data.results[0].gender;
+      person.image = data.results[0].picture.large;
+
+
+      people.push(person)
+
+    },
+
+    generateCards: async function () {
+      for (let i = 0; i < 3; i++) {
+        this.generateUser();
+      }
+
+      console.log(people);
+    }
+  
+  },
+  mounted: async function () {
+    this.generateCards();
+  }    
+}
+
 </script>
 
 <style>
@@ -24,6 +69,9 @@ import Button from "./components/Button.vue";
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 .container {

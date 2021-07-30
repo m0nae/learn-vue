@@ -1,10 +1,16 @@
 <template>
-  <div class="card"></div>
+  <div class="card">
+  <img :src="image" alt="person" />
+    <p>{{firstName}} {{lastName}}</p>
+    <p>{{ gender }}</p>
+  </div>
 </template>
 
 <script>
 export default {
   name: "Card",
+  props: ['firstName', 'lastName', 'gender', 'image']
+  
 };
 </script>
 
@@ -21,6 +27,13 @@ export default {
     transform: translateY(-3px);
     transition: all 250ms ease-in-out;
     cursor: pointer;
+  }
+
+  img {
+    border-radius: 50%;
+    height: 40%;
+    width: auto;
+    margin-top: 0.5rem;
   }
 }
 </style>
