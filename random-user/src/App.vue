@@ -1,37 +1,45 @@
 <template>
   <div class="container">
-    <Card v-for="person in people" :firstName="person.firstName" :lastName="person.lastName" :gender="person.gender" :image="person.image" />
+    <Card
+      v-for="person in people"
+      :firstName="person.firstName"
+      :lastName="person.lastName"
+      :gender="person.gender"
+      :image="person.image"
+    />
     <!-- <Card />
     <Card /> -->
   </div>
-  <Button >Generate Users</Button>
+  <Button @click="generateCards" v-on:handle-click="randomText"
+    >Generate Users</Button
+  >
 </template>
 
 <script>
-import { onMounted } from "vue";
 import HelloWorld from "./components/HelloWorld.vue";
 import Card from "./components/Card.vue";
 import Button from "./components/Button.vue";
 
 export default {
-  name: 'App',
+  name: "App",
   components: {
     HelloWorld,
     Card,
-    Button
+    Button,
   },
   data: function () {
     return {
-      people: [
-        
-      ]
-    }
+      people: [],
+    };
   },
   methods: {
+    randomText: function () {
+      console.log("randomText fn was ran");
+    },
     generateUser: async function () {
       let people = this.people;
 
-      const res = await fetch('https://randomuser.me/api')
+      const res = await fetch("https://randomuser.me/api");
       let person = {};
       let data = await res.json();
 
@@ -40,25 +48,25 @@ export default {
       person.gender = data.results[0].gender;
       person.image = data.results[0].picture.large;
 
-
-      people.push(person)
-
+      people.push(person);
     },
 
     generateCards: async function () {
+      if (this.people.length > 0) {
+        this.people = [];
+      }
+
       for (let i = 0; i < 3; i++) {
         this.generateUser();
       }
 
-      console.log(people);
-    }
-  
+      console.log(this.people);
+    },
   },
   mounted: async function () {
     this.generateCards();
-  }    
-}
-
+  },
+};
 </script>
 
 <style>
